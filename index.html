@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حب عمرو دياب</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      overflow: hidden;
+    }
+
+    .popup {
+      position: absolute;
+      padding: 10px 20px;
+      background-color: #F8C7DA;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px pink;
+      animation: fadeOut 10s ease forwards;
+      direction: rtl;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+
+    .dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #F8C7DA;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 0 15px pink;
+      z-index: 1000;
+      max-width: 80%;
+      box-sizing: border-box;
+      direction: rtl;
+    }
+  </style>
+</head>
+<body>
+  <div id="startDialog" class="dialog">اضغط على الشاشة يا حبي ❤️</div>
+
+  <audio id="backgroundMusic" src="assets/tamally.mp3" loop></audio>
+
+  <script>
+    const messages = [
+      "أشتاق إليك!",
+      "أحبك من كل قلبي ❤️",
+      "لا أستطيع التوقف عن التفكير بك",
+      "أنت أجمل ما في حياتي"
+    ];
+
+    const dialog = document.getElementById("startDialog");
+    const audio = document.getElementById("backgroundMusic");
+
+    function createPopup() {
+      const popup = document.createElement("div");
+      popup.className = "popup";
+      popup.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      const x = Math.floor(Math.random() * (screenWidth - 150));
+      const y = Math.floor(Math.random() * (screenHeight - 50));
+
+      popup.style.left = `${x}px`;
+      popup.style.top = `${y}px`;
+
+      document.body.appendChild(popup);
+
+      setTimeout(() => {
+        popup.remove();
+      }, 25000);
+    }
+
+    function startPopups(count) {
+      let created = 0;
+      const interval = setInterval(() => {
+        if (created >= count) {
+          clearInterval(interval);
+          return;
+        }
+        createPopup();
+        created++;
+      }, 30);
+    }
+
+    function enterFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      }
+    }
+
+    document.addEventListener("click", function startExperience() {
+      dialog.style.display = "none";
+      audio.play().catch(error => {
+        console.log("خطأ في تشغيل الموسيقى:", error);
+      });
+      enterFullscreen();
+      startPopups(200);
+      document.removeEventListener("click", startExperience);
+    });
+  </script>
+</body>
+</html>
